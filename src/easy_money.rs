@@ -1,6 +1,13 @@
 // This is a file that is supposed to represent a money type in Rust
 // This type doesn't need to be precise
 
+use super::currency::Currency;
+use eyre::Result;
+use rust_decimal::Decimal;
+use serde::{Deserialize, Serialize};
+use std::convert::TryFrom;
+use std::str::FromStr;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(try_from = "RawMoney")]
 pub struct EasyMoney {
