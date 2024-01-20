@@ -9,6 +9,7 @@ use std::str::FromStr;
 
 use super::currency::Currency;
 use super::money_util::{MoneyUtil, MoneyError, RawMoney};
+use super::money::Money;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(try_from = "RawMoney")]
@@ -45,3 +46,33 @@ impl TryFrom<RawMoney> for EasyMoney {
         EasyMoney::new(value.amount, value.currency)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::str::FromStr;
+    use rstest::rstest;
+
+    #[rstest]
+    #[case("1", Currency::EUR, "1.00")]
+    #[case("1.230", Currency::EUR, "1.23")]
+    // 10.20000 is a good case because when Decimal(10.20000) is converted to flaot, it becomes 10.2000...001 which is 10.20
+    #[case("10.20000", Currency::EUR, "10.20")]
+    #[case("10.0300", Currency::EUR, "10.03")]
+    fn test_easy_money(
+        #[case] amount: &str, 
+        #[case] currency: Currency, 
+        #[case] expected: &str,
+    ) {
+        let some_money = EasyMoney::from_str_amount(amount, currency).unwrap();
+        let expected_decimal_value = Decimal::from_str(expected).unwrap();
+
+        // Validate the simple money's amount in still the same 
+        assert_eq!(some_money.amount, expected_decimal_value);
+        // Validate the currency is the same
+        assert_eq!(some_money.currency, currency);
+        // Validate the amount has scale that is expected
+        assert_eq!(some_money.amount.to_string() , expected);
+    }
+}
+
