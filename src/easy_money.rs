@@ -1,12 +1,14 @@
 // This is a file that is supposed to represent a money type in Rust
 // This type doesn't need to be precise
 
-use super::currency::Currency;
 use eyre::Result;
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::str::FromStr;
+
+use super::currency::Currency;
+use super::money_util::{MoneyUtil, MoneyError, RawMoney};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(try_from = "RawMoney")]
@@ -18,7 +20,7 @@ pub struct EasyMoney {
 
 impl EasyMoney {
     pub fn new(amount: Decimal, currency: Currency) -> Result<Self, MoneyError> {
-        let amount = MoneyUtil::validate_amount(amount, currency.minor_unit_scale(), currency.minor_unit_scale())?;
+        let amount = MoneyUtil::check_amount_validation(amount, currency.minor_unit_scale(), currency.minor_unit_scale())?;
         Ok(EasyMoney { amount, currency })
     }
 

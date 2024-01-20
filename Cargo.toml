@@ -13,6 +13,5 @@ postgres-types = "0.2.0"
 rust_decimal = { version = "1.26.1", features = ["serde-float", "serde-with-str"] }
 serde = { version = "1.0.189", features = ["derive"] }
 serde_json = "1.0.68"
-sqlx = { version = "0.7.1", features = ["postgres", "macros", "runtime-tokio-native-tls"] }
 thiserror = "1.0.30"
 rstest = "0.17.0"
