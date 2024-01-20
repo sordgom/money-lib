@@ -48,11 +48,13 @@ impl TryFrom<RawMoney> for EasyMoney {
 }
 
 #[cfg(test)]
+/// This module contains tests for the `EasyMoney` struct in the `easy_money.rs` file.
 mod tests {
     use super::*;
     use std::str::FromStr;
     use rstest::rstest;
 
+    /// Test cases for the `EasyMoney` struct.
     #[rstest]
     #[case("1", Currency::EUR, "1.00")]
     #[case("1.230", Currency::EUR, "1.23")]

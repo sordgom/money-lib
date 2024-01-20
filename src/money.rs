@@ -1,3 +1,7 @@
+// This is a file that is supposed to represent a money type in Rust
+// This type needs to be very precise with a 2 scale system. 
+// Most currencies use 2 scales between 2 and 10 digits. 
+
 use eyre::Result;
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
